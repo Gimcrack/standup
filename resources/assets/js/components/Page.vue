@@ -6,19 +6,19 @@
                 <i class="fa fa-fw fa-circle-o-notch" :class="{'fa-spin' : busy}"></i>
                 {{ refresh_btn_text }}
             </button>
-            
+
             <span class="dropdown">
                 <a v-if="toggled.length" data-toggle="dropdown" role="button" aria-expanded="false" :class="busy ? 'disabled' : ''" class="dropdown-toggle btn-success btn">
                     <i class="fa fa-fw fa-bars" :class="{'fa-spin' : busy}"></i>
                     Do With Selected
                     <span class="caret"></span>
                 </a>
-    
+
                 <ul class="dropdown-menu" role="menu">
                     <slot name="selection-dropdown-menu"></slot>
                 </ul>
             </span>
-            
+
             <button v-if="toggles.new" :class="{ disabled : busy }" @click.prevent="$emit('new')" :disabled="busy" class="btn btn-success">
                 <i class="fa fa-fw fa-circle-o-notch" :class="{'fa-spin' : busy}"></i>
                 <template v-if="params.newBtnText">{{ params.newBtnText}}</template>
@@ -37,20 +37,20 @@
                     <th>
                         <i @click="toggleAll" style="cursor:pointer; font-size:1.5em; line-height:1" class="fa fa-fw" :class="toggleAllClass"></i>
                     </th>
-                    <header-sort-button 
-                        v-for="(col,index) in params.columns" 
-                        :order-by="orderBy" 
-                        :asc="asc" 
+                    <header-sort-button
+                        v-for="(col,index) in params.columns"
+                        :order-by="orderBy"
+                        :asc="asc"
                         :column="col"
                         :key="index">
                     </header-sort-button>
                 </tr>
             </thead>
-            <tbody v-if="filtered.length">
+            <template v-if="filtered.length">
                 <template v-for="model in filtered" >
                     <component :is="params.component || params.type" :initial="model" :key="model.id" @ToggledHasChanged="setToggled"></component>
                 </template>
-            </tbody>
+            </template>
             <tfoot>
                 <tr>
                     <td colspan="100">
@@ -99,7 +99,7 @@
                 }
             },
             toggles : {
-                default()  { 
+                default()  {
                     return {
                         new : true
                     }
@@ -187,13 +187,30 @@
 
             h2 {
                 margin: 0;
-                
+
             }
             display: flex;
             align-items: center;
 
             & > * + * {
                 margin-left: 0.5em;
+            }
+        }
+
+        .table-striped {
+
+            tbody + tbody {
+                margin-top: 1em;
+            }
+
+            tbody {
+                tr:first-child td {
+                    border-bottom: 1px solid transparent;
+                }
+
+                tr + tr td {
+                    border-top: 1px solid transparent;
+                }
             }
         }
     }

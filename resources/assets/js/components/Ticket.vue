@@ -1,5 +1,6 @@
 <template>
     <item
+        class="ticket"
         :id="model.id"
         :deleting="deleting"
         :updating="updating"
@@ -10,10 +11,22 @@
         <td>{{ model.assignee }}</td>
         <td>{{ model.created_date }}</td>
         <td>{{ model.department }}/{{ model.customer }}</td>
-        <td>{{ model.status }}</td>
+        <td>{{ model.custom_fields.urgency }}</td>
+        <td><span class="label" :class="[priorityClass]">{{ model.priority }}</span></td>
+        <td><span class="label" :class="[statusClass]">{{ model.status }}</span></td>
         <template slot="menu">
 
         </template>
+
+
+        <tr slot="row2">
+            <td>&nbsp;</td>
+            <td colspan="100">
+                <div v-html="model.full_description" class="description">
+
+                </div>
+            </td>
+        </tr>
     </item>
 </template>
 
@@ -26,6 +39,24 @@
         computed : {
             updated() {
                 return fromNow(this.model.updated_at);
+            },
+
+            statusClass() {
+                if ( this.model.status.$contains('Open') ) return 'label-danger';
+                if ( this.model.status.$contains('Reopened') ) return 'label-danger';
+                if ( this.model.status.$contains('Waiting') ) return 'label-warning';
+                if ( this.model.status.$contains('Pending') ) return 'label-warning';
+                if ( this.model.status.$contains('In Progress') ) return 'label-success';
+                if ( this.model.status.$contains('Ready') ) return 'label-success';
+                if ( this.model.status.$contains('Scheduled') ) return 'label-success';
+
+                return 'label-warning';
+            },
+
+            priorityClass() {
+                if ( this.model.priority.$contains('High') ) return 'label-danger';
+                if ( this.model.priority.$contains('Medium') ) return 'label-warning';
+                return 'label-success';
             }
         },
 
@@ -78,3 +109,17 @@
         }
     }
 </script>
+
+<style lang="scss">
+    .ticket {
+        .description {
+            border: 1px solid #dedede;
+            background: #efefef;
+            border-radius: 4px;
+            padding: 6px;
+
+            font-size: 12px;
+        }
+    }
+
+</style>

@@ -12,14 +12,14 @@ export default {
     mounted() {
         this.highlight();
 
-        if ( !! this.item.channel )
-            this.listen();
+        //if ( !! this.item.channel )
+            //this.listen();
     },
 
     data() {
         return {
             $item : null,
-            
+
             model : this.initial,
             updating : false,
             deleting : false,
@@ -48,7 +48,7 @@ export default {
         },
 
         name() {
-            let friendly = this.item.model_friendly; 
+            let friendly = this.item.model_friendly;
             return this.model[friendly];
         }
     },

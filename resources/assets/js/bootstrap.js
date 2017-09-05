@@ -94,6 +94,10 @@ String.prototype.$title_case = function() {
         .join(' ');
 }
 
+String.prototype.$contains = function( search ) {
+    return this.indexOf(search) !== -1;
+}
+
 import Api from './api';
 window.Api = Api;
 

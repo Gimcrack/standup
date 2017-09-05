@@ -26,6 +26,8 @@
                         'assignee',
                         'created_date',
                         'customer',
+                        'urgency',
+                        'priority',
                         'status',
                     ],
                     type : 'ticket',

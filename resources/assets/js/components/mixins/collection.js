@@ -13,7 +13,7 @@ export default {
     },
 
     mounted() {
-        this.listen();
+        //this.listen();
         //this.fetch();
     },
 
