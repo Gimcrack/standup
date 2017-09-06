@@ -36,7 +36,7 @@
 <script>
     export default {
 
-        mounted() {
+        created() {
             this.$parent.$item = this;
         },
 

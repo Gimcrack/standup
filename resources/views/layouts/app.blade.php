@@ -29,8 +29,7 @@
 
 
         <item-detail></item-detail>
-
-        <reset-password></reset-password>
+        <in-out-board></in-out-board>
         <flash message="{{ session('flash') }}"></flash>
         @endif
     </div>

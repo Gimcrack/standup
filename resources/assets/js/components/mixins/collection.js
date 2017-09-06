@@ -13,7 +13,7 @@ export default {
     },
 
     mounted() {
-        //this.listen();
+        this.listen();
         //this.fetch();
     },
 
@@ -24,7 +24,15 @@ export default {
                     .filter( this.searchModel )
                     .filter( this.params.where )
                     .reject( reject )
-                    .sortBy(this.orderBy);
+                    .sortBy( (model) => {
+                        let item = this.getItemByModel(model);
+
+                        if ( !! item && item[this.orderBy] ) {
+                            return item[this.orderBy]
+                        }
+
+                        return model[this.orderBy];
+                    });
 
             return (this.asc) ? models.value() : models.reverse().value();
         },
@@ -39,6 +47,15 @@ export default {
     },
 
     methods : {
+
+        getItemByModel(model) {
+            let item = _( this.$children )
+                    .reject( o => ! o.model )
+                    .filter( o => o.model.id == model.id )
+                    .value();
+
+            return item[0]
+        },
 
         selectedIds() {
             return this.toggled.map( o => o.model.id );
@@ -59,7 +76,7 @@ export default {
         },
 
         performFetch() {
-            Api.get( this.params.endpoint )
+            Api.get( this.params.endpoint, { params : this.$parent.fetch_params || null } )
                 .then( this.success, this.error )
         },
 
@@ -130,33 +147,33 @@ export default {
         },
 
         listen() {
-            Echo.channel(this.params.events.channel)
-                .listen( this.params.events.created, (event) => {
-                    // console.log(event);
-                    this.add( this.model(event) );
+            // Echo.channel(this.params.events.channel)
+            //     .listen( this.params.events.created, (event) => {
+            //         // console.log(event);
+            //         this.add( this.model(event) );
 
-                    if ( !! this.postCreated )
-                        this.postCreated(event);
-                })
-                .listen( this.params.events.destroyed, (event) => {
-                    this.remove( this.model(event) );
+            //         if ( !! this.postCreated )
+            //             this.postCreated(event);
+            //     })
+            //     .listen( this.params.events.destroyed, (event) => {
+            //         this.remove( this.model(event) );
 
-                    if ( !! this.postDeleted )
-                        this.postDeleted(event);
-                });
+            //         if ( !! this.postDeleted )
+            //             this.postDeleted(event);
+            //     });
 
-            let other = this.params.events.other;
-            if ( !! other ) {
-                for( let type in other ) {
-                    Echo.channel(this.params.events.channel)
-                        .listen( type, (event) => { other[type](event) } );
-                }
-            }
+            // let other = this.params.events.other;
+            // if ( !! other ) {
+            //     for( let type in other ) {
+            //         Echo.channel(this.params.events.channel)
+            //             .listen( type, (event) => { other[type](event) } );
+            //     }
+            // }
 
             let g = this.params.events.global;
             if ( !! g ) {
                 for( let type in g ) {
-
+                    console.log('Binding listener for ' + type)
                     if ( typeof g[type] === 'function' )
                     {
                         Bus.$on(type, (event) => { g[type](event) });

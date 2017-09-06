@@ -21,6 +21,8 @@
                     update : false
                 },
 
+                fetch_params : {},
+
                 details : {
                     columns : [
                         'number',
@@ -33,13 +35,19 @@
                         'score'
                     ],
                     type : 'ticket',
-                    heading : 'Tickets - ' + this.view.$ucfirst(),
-                    endpoint : 'tickets' + this.view.$ucfirst(),
-                    help : this.helpMessage(),
+                    heading : 'At Risk Tickets',
+                    endpoint : 'ticketsProblem',
+                    help : 'Tickets whose reps are absent. Use the In/Out Board button above to indicate who is absent.',
                     events : {
                         channel : 'users',
                         created : 'UserWasCreated',
                         destroyed : 'UserWasDestroyed',
+                        global : {
+                            AbsentPeople : (data) => {
+                                console.log('Event Received');
+                                this.absentPeople(data)
+                            }
+                        }
                     },
                     data_key : 'data',
                     order : 'score',
@@ -57,20 +65,15 @@
         methods : {
 
             showInOut() {
-                Bus.$emit('showInOut');
+                Bus.$emit('ShowInOutBoard');
             },
 
-            helpMessage() {
-                switch(this.view) {
-                    case 'hot' :
-                        return 'Unclosed tickets that were created recently.'
-
-                    case 'aging' :
-                        return 'Unclosed tickets that were created in the last week.'
-
-                    case 'stale' :
-                        return 'Unclosed tickets older than one week.'
+            absentPeople(data) {
+                this.fetch_params = {
+                    reps : data.absent
                 }
+
+                this.page.fetch();
             }
         },
     }

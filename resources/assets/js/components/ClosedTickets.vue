@@ -21,6 +21,10 @@
                     update : false
                 },
 
+                fetch_params : {
+
+                },
+
                 details : {
                     columns : [
                         'number',
@@ -33,9 +37,9 @@
                         'score'
                     ],
                     type : 'ticket',
-                    heading : 'Tickets - ' + this.view.$ucfirst(),
-                    endpoint : 'tickets' + this.view.$ucfirst(),
-                    help : this.helpMessage(),
+                    heading : 'Closed Tickets',
+                    endpoint : 'ticketsClosed',
+                    help : 'Tickets closed recently.',
                     events : {
                         channel : 'users',
                         created : 'UserWasCreated',
@@ -59,19 +63,6 @@
             showInOut() {
                 Bus.$emit('showInOut');
             },
-
-            helpMessage() {
-                switch(this.view) {
-                    case 'hot' :
-                        return 'Unclosed tickets that were created recently.'
-
-                    case 'aging' :
-                        return 'Unclosed tickets that were created in the last week.'
-
-                    case 'stale' :
-                        return 'Unclosed tickets older than one week.'
-                }
-            }
         },
     }
 </script>

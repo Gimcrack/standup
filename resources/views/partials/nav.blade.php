@@ -19,6 +19,14 @@
         <div class="collapse navbar-collapse" id="app-navbar-collapse">
             <!-- Left Side Of Navbar -->
             <ul class="nav navbar-nav">
+                <li>
+                    <p class="navbar-btn">
+                        <a @click.prevent="home.showInOut" class="btn btn-success">
+                            <i class="fa fa-fw fa-user"></i>
+                            <template> In/Out Board </template>
+                        </a>
+                    </p>
+                </li>
             </ul>
 
             <!-- Right Side Of Navbar -->

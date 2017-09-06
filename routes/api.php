@@ -17,9 +17,12 @@ use Illuminate\Http\Request;
 Route::get('ticketsHot', 'HotTicketController@index');
 Route::get('ticketsAging', 'AgingTicketController@index');
 Route::get('ticketsStale', 'StaleTicketController@index');
+Route::get('ticketsProblem', 'ProblemTicketController@index');
 
 Route::get('tickets', 'TicketController@index');
 Route::get('tickets/{groupOrIndivual}/{id}', 'TicketController@index');
+
+Route::get('assignees', 'RepController@index');
 
 // Route::get('agent-build', 'ClientController@agentBuild');
 // Route::get('definitions', 'DefinitionsController@index');

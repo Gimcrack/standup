@@ -34,8 +34,11 @@ Vue.component('flash', require('./components/Flash.vue'));
 Vue.component('headerSortButton', require('./components/HeaderSortButton.vue'));
 Vue.component('users', require('./components/Users.vue'));
 Vue.component('user', require('./components/User.vue'));
+Vue.component('ProblemTickets', require('./components/ProblemTickets.vue'));
+Vue.component('ClosedTickets', require('./components/ClosedTickets.vue'));
 Vue.component('Tickets', require('./components/Tickets.vue'));
 Vue.component('Ticket', require('./components/Ticket.vue'));
+Vue.component('InOutBoard', require('./components/InOutBoard.vue'));
 Vue.component('resetPassword',require('./components/ResetPassword.vue'));
 Vue.component('itemDetail',require('./components/ItemDetail.vue'));
 

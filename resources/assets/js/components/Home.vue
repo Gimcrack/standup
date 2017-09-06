@@ -15,6 +15,16 @@
                     </a>
                   </li>
                   <li>
+                    <a id="closed" @click="nav('closed',$event)">
+                        <i class="fa fa-fw fa-2x fa-check text-success"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a id="problem" @click="nav('problem',$event)">
+                        <i class="fa fa-fw fa-2x fa-exclamation-circle text-danger"></i>
+                    </a>
+                  </li>
+                  <li>
                     <a id="aging" @click="nav('aging',$event)">
                         <i class="fa fa-fw fa-2x fa-circle text-warning"></i>
                     </a>
@@ -39,6 +49,16 @@
                     <div class="tab-pane active" id="hot">
                         <div>
                             <tickets view="hot"></tickets>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="closed">
+                        <div>
+                            <closed-tickets></closed-tickets>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="problem">
+                        <div>
+                            <problem-tickets></problem-tickets>
                         </div>
                     </div>
                     <div class="tab-pane" id="aging">
@@ -73,6 +93,8 @@
         mounted() {
             this.setInitialTab();
 
+            this.$parent.home = this;
+
             window.addEventListener('popstate', (event) => {
                 if ( event.state && event.state.tab )
                 {
@@ -95,6 +117,10 @@
                 {
                     this.nav( tab );
                 }
+            },
+
+            showInOut() {
+                Bus.$emit('ShowInOutBoard');
             }
         },
     }

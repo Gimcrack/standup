@@ -55,6 +55,8 @@ export default {
 
     methods : {
         highlight(sticky) {
+            if ( ! this.$item ) return false;
+
             $(this.$item.$refs.row)
                 .addClass('hover');
 
