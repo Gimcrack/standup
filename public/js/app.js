@@ -78737,7 +78737,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             details: {
                 columns: ['number', 'assignee', 'created_date', 'customer', 'urgency', 'priority', 'status', 'score'],
                 type: 'ticket',
-                heading: 'At Risk Tickets',
+                heading: 'Absent Rep Tickets',
                 endpoint: 'ticketsProblem',
                 help: 'Tickets whose reps are absent. Use the In/Out Board button above to indicate who is absent.',
                 events: {
