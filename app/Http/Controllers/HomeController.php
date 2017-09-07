@@ -32,8 +32,9 @@ class HomeController extends Controller
         $ticketsHot = Isupport::hot();
         $ticketsAging = Isupport::aging();
         $ticketsStale = Isupport::stale();
+        $ticketsClosed = Isupport::recentClosed();
 
-        $initial_state = collect(compact('users', 'ticketsHot', 'ticketsAging', 'ticketsStale'));
+        $initial_state = collect(compact('users', 'ticketsHot', 'ticketsAging', 'ticketsStale','ticketsClosed'));
 
         return view('home', compact('initial_state') );
     }

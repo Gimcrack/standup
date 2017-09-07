@@ -36211,6 +36211,7 @@ Vue.component('user', __webpack_require__(316));
 Vue.component('ProblemTickets', __webpack_require__(363));
 Vue.component('ClosedTickets', __webpack_require__(366));
 Vue.component('Tickets', __webpack_require__(315));
+Vue.component('ClosedTicket', __webpack_require__(380));
 Vue.component('Ticket', __webpack_require__(314));
 Vue.component('InOutBoard', __webpack_require__(370));
 Vue.component('resetPassword', __webpack_require__(313));
@@ -37426,7 +37427,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     created: function created() {
+        var _this = this;
+
         this.$parent.$item = this;
+
+        Bus.$on('ShowChecked', function (val) {
+            _this.show_checked = val;
+            _this.show = !_this.toggled || _this.show_checked;
+        });
     },
 
 
@@ -37457,7 +37465,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             show_menu: false,
-            toggled: false
+            toggled: false,
+            show_checked: false,
+            show: true
         };
     },
 
@@ -37470,14 +37480,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         toggle: function toggle() {
+            var _this2 = this;
+
             this.toggled = !this.toggled;
 
-            sleep(100).then(function () {
+            sleep(200).then(function () {
                 $('tbody.toggled.top').removeClass('top');
                 $('tbody.toggled.bottom').removeClass('bottom');
 
                 $('tbody.toggled').first().addClass('top');
                 $('tbody.toggled').last().addClass('bottom');
+
+                _this2.show = !_this2.toggled || _this2.show_checked;
             });
 
             this.$emit('ToggledHasChanged');
@@ -37592,6 +37606,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -38053,13 +38074,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 
     props: ['view'],
 
     data: function data() {
+        var _this = this;
+
         return {
+            show_checked: false,
+
             toggles: {
                 new: false,
                 delete: false,
@@ -38075,7 +38106,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 events: {
                     channel: 'users',
                     created: 'UserWasCreated',
-                    destroyed: 'UserWasDestroyed'
+                    destroyed: 'UserWasDestroyed',
+                    global: {
+                        ShowChecked: function ShowChecked(val) {
+                            _this.show_checked = val;
+                        }
+                    }
                 },
                 data_key: 'data',
                 order: 'score',
@@ -38106,6 +38142,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 case 'stale':
                     return 'Unclosed tickets older than one week.';
             }
+        },
+        toggleChecked: function toggleChecked() {
+            this.show_checked = !this.show_checked;
+
+            Bus.$emit('ShowChecked', this.show_checked);
         }
     }
 });
@@ -67895,7 +67936,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), _c('table', {
     staticClass: "table table-striped table-hover"
-  }, [_c('thead', [_c('tr', [_c('th', [_c('i', {
+  }, [_c('thead', [_c('tr', [_c('td', {
+    attrs: {
+      "colspan": "100"
+    }
+  }, [_c('span', {
+    staticClass: "label label-primary"
+  }, [_vm._v("\n                        Viewing " + _vm._s(_vm.filtered.length) + " Records\n                    ")])])]), _vm._v(" "), _c('tr', [_c('th', [_c('i', {
     staticClass: "fa fa-fw",
     class: _vm.toggleAllClass,
     staticStyle: {
@@ -67947,7 +67994,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('tbody', {
+  return (_vm.show) ? _c('tbody', {
     ref: "row",
     class: {
       sticky: _vm.sticky, toggled: _vm.toggled
@@ -68052,7 +68099,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     class: {
       'fa-spin': _vm.deleting
     }
-  })]) : _vm._e()], 2) : _vm._e()]), _vm._v(" "), _vm._t("default")], 2), _vm._v(" "), _vm._t("row2")], 2)
+  })]) : _vm._e()], 2) : _vm._e()]), _vm._v(" "), _vm._t("default")], 2), _vm._v(" "), _vm._t("row2")], 2) : _vm._e()
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -68494,7 +68541,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "params": _vm.details,
       "toggles": _vm.toggles
     }
-  })
+  }, [_c('template', {
+    slot: "menu"
+  }, [_c('button', {
+    staticClass: "btn btn-primary",
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.toggleChecked($event)
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-fw fa-check",
+    class: [_vm.show_checked ? 'fa-toggle-on' : 'fa-toggle-off', {
+      active: _vm.show_checked
+    }]
+  }), _vm._v("\n            Toggle Checked\n        ")])])], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -78847,13 +78909,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 
     props: ['view'],
 
     data: function data() {
+        var _this = this;
+
         return {
+
+            show_checked: false,
+
             toggles: {
                 new: false,
                 delete: false,
@@ -78863,15 +78937,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             fetch_params: {},
 
             details: {
-                columns: ['number', 'assignee', 'created_date', 'customer', 'urgency', 'priority', 'status', 'score'],
-                type: 'ticket',
-                heading: 'Closed Tickets',
+                columns: ['number', 'assignee', 'created_date', 'closed_date', 'customer'],
+                type: 'closedTicket',
+                heading: 'Recently Closed Tickets',
                 endpoint: 'ticketsClosed',
                 help: 'Tickets closed recently.',
                 events: {
                     channel: 'users',
                     created: 'UserWasCreated',
-                    destroyed: 'UserWasDestroyed'
+                    destroyed: 'UserWasDestroyed',
+                    global: {
+                        ShowChecked: function ShowChecked(val) {
+                            _this.show_checked = val;
+                        }
+                    }
                 },
                 data_key: 'data',
                 order: 'score',
@@ -78883,6 +78962,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 email: null,
                 password: null
             }
+
         };
     },
 
@@ -78890,6 +78970,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         showInOut: function showInOut() {
             Bus.$emit('showInOut');
+        },
+        toggleChecked: function toggleChecked() {
+            this.show_checked = !this.show_checked;
+
+            Bus.$emit('ShowChecked', this.show_checked);
         }
     }
 });
@@ -78938,7 +79023,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "params": _vm.details,
       "toggles": _vm.toggles
     }
-  })
+  }, [_c('template', {
+    slot: "menu"
+  }, [_c('button', {
+    staticClass: "btn btn-primary",
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.toggleChecked($event)
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-fw fa-check",
+    class: [_vm.show_checked ? 'fa-toggle-on' : 'fa-toggle-off', {
+      active: _vm.show_checked
+    }]
+  }), _vm._v("\n            Toggle Checked\n        ")])])], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -79068,7 +79168,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return;
         },
         show: function show() {
-            this.fetch();
+            if (!this.done) this.fetch();
+
             this.visible = true;
         },
         cancel: function cancel() {
@@ -79412,6 +79513,180 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-1f1cc394\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/less-loader/index.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Rep.vue", function() {
      var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-1f1cc394\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/less-loader/index.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Rep.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 378 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moment__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    mixins: [mixins.item],
+
+    computed: {},
+
+    data: function data() {
+        return {
+            item: {
+                key: 'id',
+                type: 'ticket',
+                endpoint: 'tickets',
+                channel: 'tickets.' + this.initial.id,
+                updated: 'TicketWasUpdated'
+            },
+
+            toggles: {
+                update: false,
+                delete: false
+            }
+        };
+    },
+
+
+    methods: {
+        postUpdated: function postUpdated(event) {
+            this.updating = false;
+        },
+        update: function update() {},
+        toggleAdmin: function toggleAdmin() {
+            if (this.model.admin_flag) return this.unpromote();
+
+            return this.promote();
+        },
+        unpromote: function unpromote() {
+            this.updating = true;
+
+            Api.post('users/' + this.initial.id + '/unpromote').then(this.updateSuccess, this.error);
+        },
+        promote: function promote() {
+            this.updating = true;
+
+            Api.post('users/' + this.initial.id + '/promote').then(this.updateSuccess, this.error);
+        }
+    }
+});
+
+/***/ }),
+/* 379 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(8)();
+exports.push([module.i, "\n.ticket .description {\n  border: 1px solid #dedede;\n  background: #efefef;\n  border-radius: 4px;\n  padding: 6px;\n  font-size: 12px;\n}\n", ""]);
+
+/***/ }),
+/* 380 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(382)
+
+var Component = __webpack_require__(5)(
+  /* script */
+  __webpack_require__(378),
+  /* template */
+  __webpack_require__(381),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\b\\Code\\standup\\resources\\assets\\js\\components\\ClosedTicket.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] ClosedTicket.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1d41fa31", Component.options)
+  } else {
+    hotAPI.reload("data-v-1d41fa31", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 381 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('item', {
+    staticClass: "ticket",
+    attrs: {
+      "id": _vm.model.id,
+      "deleting": _vm.deleting,
+      "updating": _vm.updating,
+      "toggles": _vm.toggles
+    },
+    on: {
+      "view": _vm.view,
+      "ToggledHasChanged": function($event) {
+        _vm.$emit('ToggledHasChanged')
+      }
+    }
+  }, [_c('td', [_vm._v(_vm._s(_vm.model.assignee))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.created_date))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.closed_date))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.department) + "/" + _vm._s(_vm.model.customer))])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-1d41fa31", module.exports)
+  }
+}
+
+/***/ }),
+/* 382 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(379);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(11)("35f831c4", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-1d41fa31\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ClosedTicket.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-1d41fa31\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ClosedTicket.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });

@@ -1,5 +1,5 @@
 <template>
-    <tbody ref="row" :class="{sticky, toggled}">
+    <tbody v-if="show" ref="row" :class="{sticky, toggled}">
         <tr>
             <td>
                 <i @mouseover.prevent="checkToggle" @mousedown="toggle" style="cursor:pointer; font-size:1.5em; line-height:1" class="fa fa-fw" :class="[toggled ? ['fa-check-square-o','text-success'] : 'fa-square-o']"></i>
@@ -38,6 +38,11 @@
 
         created() {
             this.$parent.$item = this;
+
+            Bus.$on('ShowChecked', (val) => {
+                this.show_checked = val;
+                this.show = ( ! this.toggled || this.show_checked );
+            });
         },
 
         props : {
@@ -67,7 +72,9 @@
         data() {
             return {
                 show_menu : false,
-                toggled : false
+                toggled : false,
+                show_checked : false,
+                show : true
             }
         },
 
@@ -81,12 +88,16 @@
             toggle() {
                 this.toggled = ! this.toggled;
 
-                sleep(100).then(() => {
+
+
+                sleep(200).then(() => {
                     $('tbody.toggled.top').removeClass('top');
                     $('tbody.toggled.bottom').removeClass('bottom');
 
                     $('tbody.toggled').first().addClass('top');
                     $('tbody.toggled').last().addClass('bottom');
+
+                    this.show = ( ! this.toggled || this.show_checked );
                 });
 
                 this.$emit('ToggledHasChanged');

@@ -34,6 +34,13 @@
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
+                    <td colspan="100">
+                        <span class="label label-primary">
+                            Viewing {{ filtered.length }} Records
+                        </span>
+                    </td>
+                </tr>
+                <tr>
                     <th>
                         <i @click="toggleAll" style="cursor:pointer; font-size:1.5em; line-height:1" class="fa fa-fw" :class="toggleAllClass"></i>
                     </th>

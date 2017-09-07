@@ -3,6 +3,13 @@
         :params="details"
         :toggles="toggles"
     >
+
+        <template slot="menu">
+            <button @click.prevent="toggleChecked" class="btn btn-primary">
+                <i class="fa fa-fw fa-check" :class="[ show_checked ? 'fa-toggle-on' : 'fa-toggle-off', { active : show_checked } ]"></i>
+                Toggle Checked
+            </button>
+        </template>
     </page>
 </template>
 
@@ -15,6 +22,9 @@
 
         data() {
             return {
+
+                show_checked : false,
+
                 toggles : {
                     new : false,
                     delete : false,
@@ -30,20 +40,20 @@
                         'number',
                         'assignee',
                         'created_date',
+                        'closed_date',
                         'customer',
-                        'urgency',
-                        'priority',
-                        'status',
-                        'score'
                     ],
-                    type : 'ticket',
-                    heading : 'Closed Tickets',
+                    type : 'closedTicket',
+                    heading : 'Recently Closed Tickets',
                     endpoint : 'ticketsClosed',
                     help : 'Tickets closed recently.',
                     events : {
                         channel : 'users',
                         created : 'UserWasCreated',
                         destroyed : 'UserWasDestroyed',
+                        global : {
+                            ShowChecked : (val) => { this.show_checked = val }
+                        }
                     },
                     data_key : 'data',
                     order : 'score',
@@ -54,7 +64,9 @@
                     name : null,
                     email : null,
                     password : null
-                }
+                },
+
+
             }
         },
 
@@ -63,6 +75,12 @@
             showInOut() {
                 Bus.$emit('showInOut');
             },
+
+            toggleChecked() {
+                this.show_checked = ! this.show_checked;
+
+                Bus.$emit('ShowChecked', this.show_checked);
+            }
         },
     }
 </script>

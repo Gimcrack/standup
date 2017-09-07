@@ -3,6 +3,12 @@
         :params="details"
         :toggles="toggles"
     >
+        <template slot="menu">
+            <button @click.prevent="toggleChecked" class="btn btn-primary">
+                <i class="fa fa-fw fa-check" :class="[ show_checked ? 'fa-toggle-on' : 'fa-toggle-off', { active : show_checked } ]"></i>
+                Toggle Checked
+            </button>
+        </template>
     </page>
 </template>
 
@@ -15,6 +21,8 @@
 
         data() {
             return {
+                show_checked : false,
+
                 toggles : {
                     new : false,
                     delete : false,
@@ -40,6 +48,9 @@
                         channel : 'users',
                         created : 'UserWasCreated',
                         destroyed : 'UserWasDestroyed',
+                        global : {
+                            ShowChecked : (val) => { this.show_checked = val }
+                        }
                     },
                     data_key : 'data',
                     order : 'score',
@@ -71,6 +82,12 @@
                     case 'stale' :
                         return 'Unclosed tickets older than one week.'
                 }
+            },
+
+            toggleChecked() {
+                this.show_checked = ! this.show_checked;
+
+                Bus.$emit('ShowChecked', this.show_checked);
             }
         },
     }

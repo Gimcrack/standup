@@ -107,7 +107,9 @@
             },
 
             show() {
-                this.fetch();
+                if ( ! this.done )
+                    this.fetch();
+
                 this.visible = true;
             },
 
