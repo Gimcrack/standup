@@ -11,7 +11,17 @@
         <td>{{ model.assignee }}</td>
         <td>{{ model.created_date }}</td>
         <td>{{ model.closed_date }}</td>
+        <td>{{ model.category }}</td>
         <td>{{ model.department }}/{{ model.customer }}</td>
+
+        <tr slot="row2">
+            <td>&nbsp;</td>
+            <td colspan="100">
+                <div v-html="model.full_description" class="description">
+
+                </div>
+            </td>
+        </tr>
     </item>
 </template>
 

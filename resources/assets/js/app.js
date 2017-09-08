@@ -7,6 +7,8 @@
 
 require('./bootstrap');
 
+window.absent = [];
+
 window.Vue = require('vue');
 
 window.Bus = new Vue();
@@ -70,6 +72,7 @@ window.flash = {
 }
 
 window.mouseDown = false;
+
 
 document.body.onmousedown = function(evt) {
     if (evt.button == 0);

@@ -43,15 +43,20 @@
                         created : 'UserWasCreated',
                         destroyed : 'UserWasDestroyed',
                         global : {
+                            ShowChecked : (val) => { this.show_checked = val },
                             AbsentPeople : (data) => {
                                 console.log('Event Received');
-                                this.absentPeople(data)
-                            }
+                                this.absentPeople(data);
+
+                            },
                         }
                     },
                     data_key : 'data',
                     order : 'score',
-                    model_friendly : 'number'
+                    model_friendly : 'number',
+                    modelProps : {
+                        absent : []
+                    }
                 },
 
                 tempUser : {
@@ -72,6 +77,8 @@
                 this.fetch_params = {
                     reps : data.absent
                 }
+
+                this.details.modelProps.absent = data.absent;
 
                 this.page.fetch();
             }

@@ -55,7 +55,7 @@
             </thead>
             <template v-if="filtered.length">
                 <template v-for="model in filtered" >
-                    <component :is="params.component || params.type" :initial="model" :key="model.id" @ToggledHasChanged="setToggled"></component>
+                    <component :is="params.component || params.type" :model-props="params.modelProps" :initial="model" :key="model.id" @ToggledHasChanged="setToggled"></component>
                 </template>
             </template>
             <tfoot>

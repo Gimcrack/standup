@@ -17,8 +17,18 @@
 
                         <input v-model="filter" placeholder="Quick Find" type="text" class="form-control">
 
+                        <strong v-if="done">
+                            <h3><span class="label label-success">Reps</span></h3>
+                        </strong>
                         <ul class="rep-list" v-if="done">
                             <rep @RepInOut="report" v-for="rep in filtered_reps" :name="rep" :key="rep"></rep>
+                        </ul>
+
+                        <strong v-if="done">
+                            <h3><span class="label label-success">Groups</span></h3>
+                        </strong>
+                        <ul class="rep-list" v-if="done">
+                            <rep @RepInOut="report" v-for="rep in filtered_groups" :name="rep" :key="rep"></rep>
                         </ul>
                         <div v-if="busy">
                             <h1><i class="fa fa-fw fa-refresh fa-spin"></i></h1>
@@ -50,6 +60,7 @@
             return {
                 done : false,
                 reps : [],
+                groups : [],
                 reported : [],
                 visible : false,
                 filter : null,
@@ -66,6 +77,12 @@
                 if (! this.filter) return this.reps;
 
                 return _(this.reps).filter( name => name.toLowerCase().indexOf(this.filter.toLowerCase()) > -1).value();
+            },
+
+            filtered_groups() {
+                if (! this.filter) return this.groups;
+
+                return _(this.groups).filter( name => name.toLowerCase().indexOf(this.filter.toLowerCase()) > -1).value();
             },
 
             absent() {
@@ -135,6 +152,7 @@
             success(response) {
                 this.busy = false;
                 this.reps = response.data.persons;
+                this.groups = response.data.groups;
                 this.done = true;
             },
 
@@ -153,7 +171,7 @@
 
 <style lang="less">
     .in-out-board {
-        width: 700px;
+        width: 1050px;
         min-height: 400px;
 
         .panel-heading {
@@ -173,7 +191,7 @@
 
         .rep-list {
             list-style: none;
-            column-count: 2;
+            column-count: 3;
 
             li {
                 list-style: none;

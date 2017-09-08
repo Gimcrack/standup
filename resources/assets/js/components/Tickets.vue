@@ -49,12 +49,16 @@
                         created : 'UserWasCreated',
                         destroyed : 'UserWasDestroyed',
                         global : {
-                            ShowChecked : (val) => { this.show_checked = val }
+                            ShowChecked : (val) => { this.show_checked = val },
+                            AbsentPeople : (e) => { this.details.modelProps.absent = e.absent },
                         }
                     },
                     data_key : 'data',
                     order : 'score',
-                    model_friendly : 'number'
+                    model_friendly : 'number',
+                    modelProps : {
+                        absent : []
+                    }
                 },
 
                 tempUser : {

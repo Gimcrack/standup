@@ -36181,6 +36181,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 __webpack_require__(224);
 
+window.absent = [];
+
 window.Vue = __webpack_require__(341);
 
 window.Bus = new Vue();
@@ -37933,6 +37935,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -37953,6 +37956,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (age > 2) return 2;
             if (age > 0) return 1;
             return 0;
+        },
+        absent: function absent() {
+            if (!this.modelProps.absent) return false;
+
+            return this.modelProps.absent.indexOf(this.model.assignee) > -1;
         },
         statusScore: function statusScore() {
             var status = this.model.status || '';
@@ -38110,12 +38118,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     global: {
                         ShowChecked: function ShowChecked(val) {
                             _this.show_checked = val;
+                        },
+                        AbsentPeople: function AbsentPeople(e) {
+                            _this.details.modelProps.absent = e.absent;
                         }
                     }
                 },
                 data_key: 'data',
                 order: 'score',
-                model_friendly: 'number'
+                model_friendly: 'number',
+                modelProps: {
+                    absent: []
+                }
             },
 
             tempUser: {
@@ -38746,7 +38760,16 @@ window.mixins = {
 
 "use strict";
 /* harmony default export */ __webpack_exports__["a"] = ({
-    props: ['initial'],
+    props: {
+        initial: {
+            required: true
+        },
+        modelProps: {
+            default: function _default() {
+                return {};
+            }
+        }
+    },
 
     watch: {
         initial: function initial(value) {
@@ -67781,7 +67804,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.$emit('ToggledHasChanged')
       }
     }
-  }, [_c('td', [_vm._v(_vm._s(_vm.model.assignee))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.created_date))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.department) + "/" + _vm._s(_vm.model.customer))]), _vm._v(" "), _c('td', [(_vm.model.custom_fields.urgency) ? _c('span', {
+  }, [(!_vm.absent) ? _c('td', [_vm._v(_vm._s(_vm.model.assignee))]) : _c('td', [_c('span', {
+    staticClass: "label label-danger"
+  }, [_vm._v(_vm._s(_vm.model.assignee))])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.created_date))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.department) + "/" + _vm._s(_vm.model.customer))]), _vm._v(" "), _c('td', [(_vm.model.custom_fields.urgency) ? _c('span', {
     staticClass: "label",
     class: [_vm.urgencyClass]
   }, [_vm._v(_vm._s(_vm.model.custom_fields.urgency))]) : _vm._e()]), _vm._v(" "), _c('td', [_c('span', {
@@ -67967,6 +67992,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       key: model.id,
       tag: "component",
       attrs: {
+        "model-props": _vm.params.modelProps,
         "initial": model
       },
       on: {
@@ -78807,6 +78833,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     created: 'UserWasCreated',
                     destroyed: 'UserWasDestroyed',
                     global: {
+                        ShowChecked: function ShowChecked(val) {
+                            _this.show_checked = val;
+                        },
                         AbsentPeople: function AbsentPeople(data) {
                             console.log('Event Received');
                             _this.absentPeople(data);
@@ -78815,7 +78844,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 },
                 data_key: 'data',
                 order: 'score',
-                model_friendly: 'number'
+                model_friendly: 'number',
+                modelProps: {
+                    absent: []
+                }
             },
 
             tempUser: {
@@ -78835,6 +78867,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.fetch_params = {
                 reps: data.absent
             };
+
+            this.details.modelProps.absent = data.absent;
 
             this.page.fetch();
         }
@@ -78937,7 +78971,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             fetch_params: {},
 
             details: {
-                columns: ['number', 'assignee', 'created_date', 'closed_date', 'customer'],
+                columns: ['number', 'assignee', 'created_date', 'closed_date', 'category', 'customer'],
                 type: 'closedTicket',
                 heading: 'Recently Closed Tickets',
                 endpoint: 'ticketsClosed',
@@ -79092,6 +79126,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -79107,6 +79151,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             done: false,
             reps: [],
+            groups: [],
             reported: [],
             visible: false,
             filter: null,
@@ -79129,6 +79174,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return name.toLowerCase().indexOf(_this.filter.toLowerCase()) > -1;
             }).value();
         },
+        filtered_groups: function filtered_groups() {
+            var _this2 = this;
+
+            if (!this.filter) return this.groups;
+
+            return _(this.groups).filter(function (name) {
+                return name.toLowerCase().indexOf(_this2.filter.toLowerCase()) > -1;
+            }).value();
+        },
         absent: function absent() {
             return _(this.reported).filter(function (rep) {
                 return !rep.here;
@@ -79143,10 +79197,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             Api.get('assignees').then(this.success, this.error);
         },
         listen: function listen() {
-            var _this2 = this;
+            var _this3 = this;
 
             Bus.$on('ShowInOutBoard', function (event) {
-                _this2.show();
+                _this3.show();
             });
         },
         report: function report(rep) {
@@ -79188,6 +79242,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         success: function success(response) {
             this.busy = false;
             this.reps = response.data.persons;
+            this.groups = response.data.groups;
             this.done = true;
         },
         error: function error(_error) {
@@ -79206,7 +79261,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(8)();
-exports.push([module.i, "\n.in-out-board {\n  width: 700px;\n  min-height: 400px;\n}\n.in-out-board .panel-heading {\n  font-size: 24px;\n}\n.in-out-board .panel-footer {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: end;\n      -ms-flex-pack: end;\n          justify-content: flex-end;\n}\n.in-out-board .panel-body button {\n  font-weight: bold;\n}\n.in-out-board .rep-list {\n  list-style: none;\n  -webkit-column-count: 2;\n          column-count: 2;\n}\n.in-out-board .rep-list li {\n  list-style: none;\n}\n.in-out-board .partial-path-form {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n}\n.in-out-board .partial-path-form input {\n  -webkit-box-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n}\n.in-out-board .partial-path-form * + * {\n  margin-left: 15px;\n}\n.in-out-board .form-control {\n  width: 100%;\n  margin-bottom: 15px;\n}\n.in-out-board-wrapper {\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 1000;\n  height: 100vh;\n  width: 100vw;\n  background: rgba(0, 0, 0, 0.3);\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n", ""]);
+exports.push([module.i, "\n.in-out-board {\n  width: 1050px;\n  min-height: 400px;\n}\n.in-out-board .panel-heading {\n  font-size: 24px;\n}\n.in-out-board .panel-footer {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: end;\n      -ms-flex-pack: end;\n          justify-content: flex-end;\n}\n.in-out-board .panel-body button {\n  font-weight: bold;\n}\n.in-out-board .rep-list {\n  list-style: none;\n  -webkit-column-count: 3;\n          column-count: 3;\n}\n.in-out-board .rep-list li {\n  list-style: none;\n}\n.in-out-board .partial-path-form {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n}\n.in-out-board .partial-path-form input {\n  -webkit-box-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n}\n.in-out-board .partial-path-form * + * {\n  margin-left: 15px;\n}\n.in-out-board .form-control {\n  width: 100%;\n  margin-bottom: 15px;\n}\n.in-out-board-wrapper {\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 1000;\n  height: 100vh;\n  width: 100vw;\n  background: rgba(0, 0, 0, 0.3);\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n", ""]);
 
 /***/ }),
 /* 370 */
@@ -79287,7 +79342,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.filter = $event.target.value
       }
     }
-  }), _vm._v(" "), (_vm.done) ? _c('ul', {
+  }), _vm._v(" "), (_vm.done) ? _c('strong', [_vm._m(2)]) : _vm._e(), _vm._v(" "), (_vm.done) ? _c('ul', {
     staticClass: "rep-list"
   }, _vm._l((_vm.filtered_reps), function(rep) {
     return _c('rep', {
@@ -79299,7 +79354,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "RepInOut": _vm.report
       }
     })
-  })) : _vm._e(), _vm._v(" "), (_vm.busy) ? _c('div', [_vm._m(2)]) : _vm._e()]), _vm._v(" "), _c('div', {
+  })) : _vm._e(), _vm._v(" "), (_vm.done) ? _c('strong', [_vm._m(3)]) : _vm._e(), _vm._v(" "), (_vm.done) ? _c('ul', {
+    staticClass: "rep-list"
+  }, _vm._l((_vm.filtered_groups), function(rep) {
+    return _c('rep', {
+      key: rep,
+      attrs: {
+        "name": rep
+      },
+      on: {
+        "RepInOut": _vm.report
+      }
+    })
+  })) : _vm._e(), _vm._v(" "), (_vm.busy) ? _c('div', [_vm._m(4)]) : _vm._e()]), _vm._v(" "), _c('div', {
     staticClass: "panel-footer"
   }, [_c('div', {
     staticClass: "btn-group"
@@ -79342,6 +79409,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('i', {
     staticClass: "fa fa-fw fa-exclamation-circle"
   }), _vm._v(" "), _c('strong', [_vm._v("Note")]), _vm._v(" Uncheck people who are not here.\n                    ")])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h3', [_c('span', {
+    staticClass: "label label-success"
+  }, [_vm._v("Reps")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h3', [_c('span', {
+    staticClass: "label label-success"
+  }, [_vm._v("Groups")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h1', [_c('i', {
     staticClass: "fa fa-fw fa-refresh fa-spin"
@@ -79546,6 +79621,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -79659,7 +79744,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.$emit('ToggledHasChanged')
       }
     }
-  }, [_c('td', [_vm._v(_vm._s(_vm.model.assignee))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.created_date))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.closed_date))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.department) + "/" + _vm._s(_vm.model.customer))])])
+  }, [_c('td', [_vm._v(_vm._s(_vm.model.assignee))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.created_date))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.closed_date))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.category))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.department) + "/" + _vm._s(_vm.model.customer))]), _vm._v(" "), _c('tr', {
+    slot: "row2"
+  }, [_c('td', [_vm._v(" ")]), _vm._v(" "), _c('td', {
+    attrs: {
+      "colspan": "100"
+    }
+  }, [_c('div', {
+    staticClass: "description",
+    domProps: {
+      "innerHTML": _vm._s(_vm.model.full_description)
+    }
+  })])])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

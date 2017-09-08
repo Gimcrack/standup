@@ -41,6 +41,7 @@
                         'assignee',
                         'created_date',
                         'closed_date',
+                        'category',
                         'customer',
                     ],
                     type : 'closedTicket',

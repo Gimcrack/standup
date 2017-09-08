@@ -1,7 +1,14 @@
 export default {
-    props : [
-        'initial'
-    ],
+    props : {
+        initial : {
+            required : true,
+        },
+        modelProps : {
+            default() {
+                return {};
+            }
+        }
+    },
 
     watch : {
         initial(value) {
