@@ -8,10 +8,11 @@
         @view="view"
         @ToggledHasChanged="$emit('ToggledHasChanged')"
     >
+        <td>{{ model.number }}</td>
         <td v-if="! absent">{{ model.assignee }}</td>
         <td v-else><span class="label label-danger">{{ model.assignee }}</span></td>
         <td>{{ model.created_date }}</td>
-        <td>{{ model.department }}/{{ model.customer }}</td>
+        <td>{{ customer }}</td>
         <td><span v-if="model.custom_fields.urgency" class="label" :class="[urgencyClass]">{{ model.custom_fields.urgency }}</span></td>
         <td><span class="label" :class="[priorityClass]">{{ model.priority }}</span></td>
         <td><span class="label" :class="[statusClass]">{{ model.status }}</span></td>
@@ -54,6 +55,14 @@
                 if ( age > 2 ) return 2;
                 if ( age > 0 ) return 1;
                 return 0;
+            },
+
+            customer() {
+                if ( !!  this.model.department ) {
+                    return this.model.department + '/' + this.model.customer;
+                }
+
+                return ( this.model.customer.length > 30 ) ? this.model.customer.slice(0,30) + '...' : this.model.customer;
             },
 
             absent() {

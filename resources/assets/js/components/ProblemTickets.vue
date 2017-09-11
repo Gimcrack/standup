@@ -3,6 +3,10 @@
         :params="details"
         :toggles="toggles"
     >
+        <template slot="menu">
+            <toggle @clicked="toggleChecked" :active="show_checked">Checked</toggle>
+            <toggle @clicked="toggleOpen" :active="show_open">Open Only</toggle>
+        </template>
     </page>
 </template>
 
@@ -15,6 +19,9 @@
 
         data() {
             return {
+                show_checked : false,
+                show_open : false,
+
                 toggles : {
                     new : false,
                     delete : false,
@@ -56,7 +63,8 @@
                     model_friendly : 'number',
                     modelProps : {
                         absent : []
-                    }
+                    },
+                    where : {}
                 },
 
                 tempUser : {
@@ -81,6 +89,18 @@
                 this.details.modelProps.absent = data.absent;
 
                 this.page.fetch();
+            },
+
+            toggleChecked() {
+                this.show_checked = ! this.show_checked;
+
+                Bus.$emit('ShowChecked', this.show_checked);
+            },
+
+            toggleOpen() {
+                this.show_open = ! this.show_open;
+
+                this.details.where = ( this.show_open ) ? { status : 'Open' } : {};
             }
         },
     }

@@ -36216,6 +36216,7 @@ Vue.component('Tickets', __webpack_require__(315));
 Vue.component('ClosedTicket', __webpack_require__(380));
 Vue.component('Ticket', __webpack_require__(314));
 Vue.component('InOutBoard', __webpack_require__(370));
+Vue.component('Toggle', __webpack_require__(384));
 Vue.component('resetPassword', __webpack_require__(313));
 Vue.component('itemDetail', __webpack_require__(311));
 
@@ -37936,6 +37937,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -37956,6 +37958,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (age > 2) return 2;
             if (age > 0) return 1;
             return 0;
+        },
+        customer: function customer() {
+            if (!!this.model.department) {
+                return this.model.department + '/' + this.model.customer;
+            }
+
+            return this.model.customer.length > 30 ? this.model.customer.slice(0, 30) + '...' : this.model.customer;
         },
         absent: function absent() {
             if (!this.modelProps.absent) return false;
@@ -38086,8 +38095,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 
@@ -38098,6 +38105,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         return {
             show_checked: false,
+            show_open: false,
 
             toggles: {
                 new: false,
@@ -38106,7 +38114,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
 
             details: {
-                columns: ['number', 'assignee', 'created_date', 'customer', 'urgency', 'priority', 'status', 'score'],
+                columns: ['id', 'number', 'assignee', 'created_date', 'customer', 'urgency', 'priority', 'status', 'score'],
                 type: 'ticket',
                 heading: 'Tickets - ' + this.view.$ucfirst(),
                 endpoint: 'tickets' + this.view.$ucfirst(),
@@ -38129,7 +38137,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 model_friendly: 'number',
                 modelProps: {
                     absent: []
-                }
+                },
+                where: {}
             },
 
             tempUser: {
@@ -38161,6 +38170,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.show_checked = !this.show_checked;
 
             Bus.$emit('ShowChecked', this.show_checked);
+        },
+        toggleOpen: function toggleOpen() {
+            this.show_open = !this.show_open;
+
+            this.details.where = this.show_open ? { status: 'Open' } : {};
         }
     }
 });
@@ -67804,9 +67818,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.$emit('ToggledHasChanged')
       }
     }
-  }, [(!_vm.absent) ? _c('td', [_vm._v(_vm._s(_vm.model.assignee))]) : _c('td', [_c('span', {
+  }, [_c('td', [_vm._v(_vm._s(_vm.model.number))]), _vm._v(" "), (!_vm.absent) ? _c('td', [_vm._v(_vm._s(_vm.model.assignee))]) : _c('td', [_c('span', {
     staticClass: "label label-danger"
-  }, [_vm._v(_vm._s(_vm.model.assignee))])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.created_date))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.department) + "/" + _vm._s(_vm.model.customer))]), _vm._v(" "), _c('td', [(_vm.model.custom_fields.urgency) ? _c('span', {
+  }, [_vm._v(_vm._s(_vm.model.assignee))])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.created_date))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.customer))]), _vm._v(" "), _c('td', [(_vm.model.custom_fields.urgency) ? _c('span', {
     staticClass: "label",
     class: [_vm.urgencyClass]
   }, [_vm._v(_vm._s(_vm.model.custom_fields.urgency))]) : _vm._e()]), _vm._v(" "), _c('td', [_c('span', {
@@ -68569,20 +68583,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('template', {
     slot: "menu"
-  }, [_c('button', {
-    staticClass: "btn btn-primary",
+  }, [_c('toggle', {
+    attrs: {
+      "active": _vm.show_checked
+    },
     on: {
-      "click": function($event) {
-        $event.preventDefault();
-        _vm.toggleChecked($event)
-      }
+      "clicked": _vm.toggleChecked
     }
-  }, [_c('i', {
-    staticClass: "fa fa-fw fa-check",
-    class: [_vm.show_checked ? 'fa-toggle-on' : 'fa-toggle-off', {
-      active: _vm.show_checked
-    }]
-  }), _vm._v("\n            Toggle Checked\n        ")])])], 2)
+  }, [_vm._v("Checked")]), _vm._v(" "), _c('toggle', {
+    attrs: {
+      "active": _vm.show_open
+    },
+    on: {
+      "clicked": _vm.toggleOpen
+    }
+  }, [_vm._v("Open Only")])], 1)], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -78805,6 +78820,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 
@@ -78814,6 +78833,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var _this = this;
 
         return {
+            show_checked: false,
+            show_open: false,
+
             toggles: {
                 new: false,
                 delete: false,
@@ -78847,7 +78869,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 model_friendly: 'number',
                 modelProps: {
                     absent: []
-                }
+                },
+                where: {}
             },
 
             tempUser: {
@@ -78871,6 +78894,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.details.modelProps.absent = data.absent;
 
             this.page.fetch();
+        },
+        toggleChecked: function toggleChecked() {
+            this.show_checked = !this.show_checked;
+
+            Bus.$emit('ShowChecked', this.show_checked);
+        },
+        toggleOpen: function toggleOpen() {
+            this.show_open = !this.show_open;
+
+            this.details.where = this.show_open ? { status: 'Open' } : {};
         }
     }
 });
@@ -78919,7 +78952,23 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "params": _vm.details,
       "toggles": _vm.toggles
     }
-  })
+  }, [_c('template', {
+    slot: "menu"
+  }, [_c('toggle', {
+    attrs: {
+      "active": _vm.show_checked
+    },
+    on: {
+      "clicked": _vm.toggleChecked
+    }
+  }, [_vm._v("Checked")]), _vm._v(" "), _c('toggle', {
+    attrs: {
+      "active": _vm.show_open
+    },
+    on: {
+      "clicked": _vm.toggleOpen
+    }
+  }, [_vm._v("Open Only")])], 1)], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -79789,6 +79838,87 @@ if(false) {
  }
  // When the module is disposed, remove the <style> tags
  module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 383 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['active']
+});
+
+/***/ }),
+/* 384 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(5)(
+  /* script */
+  __webpack_require__(383),
+  /* template */
+  __webpack_require__(385),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\b\\Code\\standup\\resources\\assets\\js\\components\\Toggle.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Toggle.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-55da54ad", Component.options)
+  } else {
+    hotAPI.reload("data-v-55da54ad", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 385 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('button', {
+    staticClass: "btn btn-success",
+    class: {
+      active: _vm.active
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.$emit('clicked')
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-fw",
+    class: [_vm.active ? 'fa-toggle-on' : 'fa-toggle-off']
+  }), _vm._v(" "), _vm._t("default")], 2)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-55da54ad", module.exports)
+  }
 }
 
 /***/ })

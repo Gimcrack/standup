@@ -4,10 +4,8 @@
         :toggles="toggles"
     >
         <template slot="menu">
-            <button @click.prevent="toggleChecked" class="btn btn-primary">
-                <i class="fa fa-fw fa-check" :class="[ show_checked ? 'fa-toggle-on' : 'fa-toggle-off', { active : show_checked } ]"></i>
-                Toggle Checked
-            </button>
+            <toggle @clicked="toggleChecked" :active="show_checked">Checked</toggle>
+            <toggle @clicked="toggleOpen" :active="show_open">Open Only</toggle>
         </template>
     </page>
 </template>
@@ -22,6 +20,7 @@
         data() {
             return {
                 show_checked : false,
+                show_open : false,
 
                 toggles : {
                     new : false,
@@ -31,6 +30,7 @@
 
                 details : {
                     columns : [
+                        'id',
                         'number',
                         'assignee',
                         'created_date',
@@ -58,7 +58,8 @@
                     model_friendly : 'number',
                     modelProps : {
                         absent : []
-                    }
+                    },
+                    where : {}
                 },
 
                 tempUser : {
@@ -92,6 +93,12 @@
                 this.show_checked = ! this.show_checked;
 
                 Bus.$emit('ShowChecked', this.show_checked);
+            },
+
+            toggleOpen() {
+                this.show_open = ! this.show_open;
+
+                this.details.where = ( this.show_open ) ? { status : 'Open' } : {};
             }
         },
     }

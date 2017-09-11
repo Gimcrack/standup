@@ -42,6 +42,7 @@ Vue.component('Tickets', require('./components/Tickets.vue'));
 Vue.component('ClosedTicket', require('./components/ClosedTicket.vue'));
 Vue.component('Ticket', require('./components/Ticket.vue'));
 Vue.component('InOutBoard', require('./components/InOutBoard.vue'));
+Vue.component('Toggle', require('./components/Toggle.vue'));
 Vue.component('resetPassword',require('./components/ResetPassword.vue'));
 Vue.component('itemDetail',require('./components/ItemDetail.vue'));
 
