@@ -68486,7 +68486,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "fa fa-fw fa-2x fa-circle text-danger"
-  })])]), _vm._v(" "), _c('li', [_c('a', {
+  })])]), _vm._v(" "), (_vm.user.admin_flag) ? _c('li', [_c('a', {
     attrs: {
       "id": "users"
     },
@@ -68497,7 +68497,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "fa fa-fw fa-2x fa-users"
-  })])])])]), _vm._v(" "), _c('div', {
+  })])]) : _vm._e()])]), _vm._v(" "), _c('div', {
     staticClass: "col-xs-11"
   }, [_c('div', {
     staticClass: "tab-content"
@@ -68543,12 +68543,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "view": "stale"
     }
-  })], 1)]), _vm._v(" "), _c('div', {
+  })], 1)]), _vm._v(" "), (_vm.user.admin_flag) ? _c('div', {
     staticClass: "tab-pane",
     attrs: {
       "id": "users"
     }
-  }, [_c('div', [_c('users')], 1)])])])])])
+  }, [_c('div', [_c('users')], 1)]) : _vm._e()])])])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

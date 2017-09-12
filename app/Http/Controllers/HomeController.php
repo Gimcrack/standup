@@ -28,7 +28,7 @@ class HomeController extends Controller
     {
         // initial state
 
-        $users = User::all();
+        $users = ( \Auth::user()->isAdmin() ) ? User::all() : [];
         $ticketsHot = Isupport::hot();
         $ticketsAging = Isupport::aging();
         $ticketsStale = Isupport::stale();

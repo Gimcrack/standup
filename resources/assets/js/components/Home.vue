@@ -34,7 +34,7 @@
                         <i class="fa fa-fw fa-2x fa-circle text-danger"></i>
                     </a>
                   </li>
-                  <li>
+                  <li v-if="user.admin_flag">
                     <a id="users" @click="nav('users',$event)">
                         <i class="fa fa-fw fa-2x fa-users"></i>
                     </a>
@@ -75,7 +75,7 @@
                             <tickets view="stale"></tickets>
                         </div>
                     </div>
-                    <div class="tab-pane" id="users">
+                    <div v-if="user.admin_flag" class="tab-pane" id="users">
                         <div>
                             <users></users>
                         </div>
