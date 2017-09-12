@@ -37544,6 +37544,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -41381,7 +41382,7 @@ exports.push([module.i, "\n#home-container {\n  background: white;\n  width: 140
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(8)();
-exports.push([module.i, "\n.item-detail {\n  width: 90%;\n  min-height: 90%;\n}\n.item-detail .panel-heading {\n  font-size: 24px;\n}\n.item-detail .panel-footer {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: end;\n      -ms-flex-pack: end;\n          justify-content: flex-end;\n}\n.item-detail .panel-body {\n  height: 76vh;\n  overflow-y: scroll;\n  padding: 0 1em;\n}\n.item-detail .panel-body button {\n  font-weight: bold;\n}\n.item-detail .panel-body iframe {\n  width: 100%;\n  height: 100%;\n  margin: 1em 0;\n}\n.item-detail .partial-path-form {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n}\n.item-detail .partial-path-form input {\n  -webkit-box-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n}\n.item-detail .partial-path-form * + * {\n  margin-left: 15px;\n}\n.item-detail-wrapper {\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 1000;\n  height: 100vh;\n  width: 100vw;\n  background: rgba(0, 0, 0, 0.3);\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n", ""]);
+exports.push([module.i, "\n.item-detail {\n  width: 90%;\n  min-height: 90%;\n}\n.item-detail .panel-heading {\n  font-size: 24px;\n}\n.item-detail .panel-footer {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: end;\n      -ms-flex-pack: end;\n          justify-content: flex-end;\n}\n.item-detail .panel-body {\n  height: 76vh;\n  overflow-y: scroll;\n  padding: 0 1em;\n}\n.item-detail .panel-body button {\n  font-weight: bold;\n}\n.item-detail .panel-body iframe {\n  width: 100%;\n  height: 100%;\n  margin: 1em 0;\n}\n.item-detail .partial-path-form {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n}\n.item-detail .partial-path-form input {\n  -webkit-box-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n}\n.item-detail .partial-path-form * + * {\n  margin-left: 15px;\n}\n.item-detail-wrapper {\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 1000;\n  height: 100vh;\n  width: 100vw;\n  background: rgba(0, 0, 0, 0.3);\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n.item-detail-wrapper .btn-close {\n  position: fixed;\n  top: 0;\n  right: 0;\n  border: none;\n  background: none;\n  outline: none;\n}\n.item-detail-wrapper .btn-close:hover {\n  color: rgba(0, 0, 0, 0.5);\n}\n", ""]);
 
 /***/ }),
 /* 237 */
@@ -68541,7 +68542,17 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return (_vm.visible) ? _c('div', {
     staticClass: "item-detail-wrapper"
-  }, [_c('div', {
+  }, [_c('button', {
+    staticClass: "btn-close",
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.cancel($event)
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-fw fa-5x fa-times"
+  })]), _vm._v(" "), _c('div', {
     staticClass: "item-detail"
   }, [_c('div', {
     staticClass: "panel panel-default"

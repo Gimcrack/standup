@@ -1,5 +1,6 @@
 <template>
     <div v-if="visible" class="item-detail-wrapper">
+        <button @click.prevent="cancel" class="btn-close"><i class="fa fa-fw fa-5x fa-times"></i></button>
         <div class="item-detail">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -149,5 +150,18 @@
         display: flex;
         justify-content: center;
         align-items: center;
+
+        .btn-close {
+            position: fixed;
+            top: 0;
+            right: 0;
+            border: none;
+            background: none;
+            outline: none;
+
+            &:hover {
+                color: rgba(0,0,0,0.5);
+            }
+        }
     }
 </style>
