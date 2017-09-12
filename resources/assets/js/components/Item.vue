@@ -10,7 +10,10 @@
                     <button @click.prevent.stop="show_menu = !show_menu" class="btn btn-xs btn-default btn-outline" :class="{ active : show_menu }">
                         <i class="fa fa-bars"></i>
                     </button>
-                    <button @click.prevent="$emit('view')" class="btn btn-xs btn-default btn-outline">
+                    <button v-if="toggles.view_external" @click.prevent="$emit('external')" class="btn btn-xs btn-default btn-outline">
+                        {{ id }}<i class="fa fa-fw fa-external-link"></i>
+                    </button>
+                    <button v-else @click.prevent="$emit('view')" class="btn btn-xs btn-default btn-outline">
                         {{ id }}
                     </button>
                 </div>

@@ -1,14 +1,14 @@
 <template>
     <item
         class="ticket"
-        :id="model.id"
+        :id="model.number"
         :deleting="deleting"
         :updating="updating"
         :toggles="toggles"
         @view="view"
+        @external="viewExternal"
         @ToggledHasChanged="$emit('ToggledHasChanged')"
     >
-        <td>{{ model.number }}</td>
         <td v-if="! absent">{{ model.assignee }}</td>
         <td v-else><span class="label label-danger">{{ model.assignee }}</span></td>
         <td>{{ model.created_date }}</td>
@@ -55,6 +55,10 @@
                 if ( age > 2 ) return 2;
                 if ( age > 0 ) return 1;
                 return 0;
+            },
+
+            url() {
+                return `https://isupport.matsugov.us/Rep/Incident/default.aspx?ID=${this.model.id}`;
             },
 
             customer() {
@@ -155,6 +159,7 @@
                 toggles : {
                     update : false,
                     delete : false,
+                    view_external : true,
                 }
             }
         },
@@ -162,6 +167,11 @@
         methods : {
             postUpdated(event) {
                 this.updating = false;
+            },
+
+            viewExternal() {
+                var win = window.open(this.url, '_blank');
+                win.focus();
             },
 
             update() {

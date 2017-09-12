@@ -30,7 +30,6 @@
 
                 details : {
                     columns : [
-                        'id',
                         'number',
                         'assignee',
                         'created_date',

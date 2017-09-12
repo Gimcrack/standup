@@ -37427,6 +37427,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     created: function created() {
@@ -37959,6 +37962,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (age > 0) return 1;
             return 0;
         },
+        url: function url() {
+            return 'https://isupport.matsugov.us/Rep/Incident/default.aspx?ID=' + this.model.id;
+        },
         customer: function customer() {
             if (!!this.model.department) {
                 return this.model.department + '/' + this.model.customer;
@@ -38048,7 +38054,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             toggles: {
                 update: false,
-                delete: false
+                delete: false,
+                view_external: true
             }
         };
     },
@@ -38057,6 +38064,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         postUpdated: function postUpdated(event) {
             this.updating = false;
+        },
+        viewExternal: function viewExternal() {
+            var win = window.open(this.url, '_blank');
+            win.focus();
         },
         update: function update() {},
         toggleAdmin: function toggleAdmin() {
@@ -38114,7 +38125,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
 
             details: {
-                columns: ['id', 'number', 'assignee', 'created_date', 'customer', 'urgency', 'priority', 'status', 'score'],
+                columns: ['number', 'assignee', 'created_date', 'customer', 'urgency', 'priority', 'status', 'score'],
                 type: 'ticket',
                 heading: 'Tickets - ' + this.view.$ucfirst(),
                 endpoint: 'tickets' + this.view.$ucfirst(),
@@ -67807,18 +67818,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('item', {
     staticClass: "ticket",
     attrs: {
-      "id": _vm.model.id,
+      "id": _vm.model.number,
       "deleting": _vm.deleting,
       "updating": _vm.updating,
       "toggles": _vm.toggles
     },
     on: {
       "view": _vm.view,
+      "external": _vm.viewExternal,
       "ToggledHasChanged": function($event) {
         _vm.$emit('ToggledHasChanged')
       }
     }
-  }, [_c('td', [_vm._v(_vm._s(_vm.model.number))]), _vm._v(" "), (!_vm.absent) ? _c('td', [_vm._v(_vm._s(_vm.model.assignee))]) : _c('td', [_c('span', {
+  }, [(!_vm.absent) ? _c('td', [_vm._v(_vm._s(_vm.model.assignee))]) : _c('td', [_c('span', {
     staticClass: "label label-danger"
   }, [_vm._v(_vm._s(_vm.model.assignee))])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.model.created_date))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.customer))]), _vm._v(" "), _c('td', [(_vm.model.custom_fields.urgency) ? _c('span', {
     staticClass: "label",
@@ -68072,7 +68084,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "fa fa-bars"
-  })]), _vm._v(" "), _c('button', {
+  })]), _vm._v(" "), (_vm.toggles.view_external) ? _c('button', {
+    staticClass: "btn btn-xs btn-default btn-outline",
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.$emit('external')
+      }
+    }
+  }, [_vm._v("\n                    " + _vm._s(_vm.id)), _c('i', {
+    staticClass: "fa fa-fw fa-external-link"
+  })]) : _c('button', {
     staticClass: "btn btn-xs btn-default btn-outline",
     on: {
       "click": function($event) {
