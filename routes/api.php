@@ -18,6 +18,7 @@ Route::get('ticketsHot', 'HotTicketController@index');
 Route::get('ticketsAging', 'AgingTicketController@index');
 Route::get('ticketsStale', 'StaleTicketController@index');
 Route::get('ticketsProblem', 'ProblemTicketController@index');
+Route::get('ticketsMine', 'MyTicketController@index');
 Route::get('ticketsClosed', 'ClosedTicketController@index');
 
 Route::get('tickets', 'TicketController@index');

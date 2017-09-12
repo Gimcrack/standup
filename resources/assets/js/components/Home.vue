@@ -4,11 +4,11 @@
             <div class="col-xs-1"> <!-- required for floating -->
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs tabs-left">
-                  <!-- <li >
-                    <a href="#home">
-                        <i class="fa fa-fw fa-2x fa-home"></i>
+                  <li>
+                    <a id="my" @click="nav('my',$event)">
+                        <i class="fa fa-fw fa-2x fa-user"></i>
                     </a>
-                  </li> -->
+                  </li>
                   <li class="active">
                     <a id="hot" @click="nav('hot',$event)">
                         <i class="fa fa-fw fa-2x fa-circle text-success"></i>
@@ -45,7 +45,11 @@
             <div class="col-xs-11">
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    <!-- <div class="tab-pane " id="home">Home</div> -->
+                    <div class="tab-pane" id="my">
+                        <div>
+                            <my-tickets></my-tickets>
+                        </div>
+                    </div>
                     <div class="tab-pane active" id="hot">
                         <div>
                             <tickets view="hot"></tickets>
@@ -84,6 +88,10 @@
 
 <script>
     export default {
+        props : [
+            'user'
+        ],
+
         data() {
             return {
 

@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-<home></home>
+<home :user="{{ Auth::user()->toJson() }}"></home>
 @endsection

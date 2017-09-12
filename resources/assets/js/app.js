@@ -36,6 +36,7 @@ Vue.component('flash', require('./components/Flash.vue'));
 Vue.component('headerSortButton', require('./components/HeaderSortButton.vue'));
 Vue.component('users', require('./components/Users.vue'));
 Vue.component('user', require('./components/User.vue'));
+Vue.component('MyTickets', require('./components/MyTickets.vue'));
 Vue.component('ProblemTickets', require('./components/ProblemTickets.vue'));
 Vue.component('ClosedTickets', require('./components/ClosedTickets.vue'));
 Vue.component('Tickets', require('./components/Tickets.vue'));

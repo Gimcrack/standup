@@ -36210,6 +36210,7 @@ Vue.component('flash', __webpack_require__(307));
 Vue.component('headerSortButton', __webpack_require__(308));
 Vue.component('users', __webpack_require__(317));
 Vue.component('user', __webpack_require__(316));
+Vue.component('MyTickets', __webpack_require__(387));
 Vue.component('ProblemTickets', __webpack_require__(363));
 Vue.component('ClosedTickets', __webpack_require__(366));
 Vue.component('Tickets', __webpack_require__(315));
@@ -37348,8 +37349,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['user'],
+
     data: function data() {
         return {};
     },
@@ -68411,7 +68418,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "col-xs-1"
   }, [_c('ul', {
     staticClass: "nav nav-tabs tabs-left"
-  }, [_c('li', {
+  }, [_c('li', [_c('a', {
+    attrs: {
+      "id": "my"
+    },
+    on: {
+      "click": function($event) {
+        _vm.nav('my', $event)
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-fw fa-2x fa-user"
+  })])]), _vm._v(" "), _c('li', {
     staticClass: "active"
   }, [_c('a', {
     attrs: {
@@ -68484,6 +68502,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "tab-content"
   }, [_c('div', {
+    staticClass: "tab-pane",
+    attrs: {
+      "id": "my"
+    }
+  }, [_c('div', [_c('my-tickets')], 1)]), _vm._v(" "), _c('div', {
     staticClass: "tab-pane active",
     attrs: {
       "id": "hot"
@@ -79951,6 +79974,167 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-55da54ad", module.exports)
+  }
+}
+
+/***/ }),
+/* 386 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+
+    props: ['view'],
+
+    data: function data() {
+        var _this = this;
+
+        return {
+            show_checked: false,
+            show_open: false,
+
+            toggles: {
+                new: false,
+                delete: false,
+                update: false
+            },
+
+            fetch_params: {
+                reps: [this.$parent.user.name]
+            },
+
+            details: {
+                columns: ['number', 'assignee', 'created_date', 'customer', 'urgency', 'priority', 'status', 'score'],
+                type: 'ticket',
+                heading: 'My Tickets',
+                endpoint: 'ticketsMine',
+                help: 'Tickets assigned to me',
+                events: {
+                    channel: 'users',
+                    created: 'UserWasCreated',
+                    destroyed: 'UserWasDestroyed',
+                    global: {
+                        ShowChecked: function ShowChecked(val) {
+                            _this.show_checked = val;
+                        }
+                    }
+                },
+                data_key: 'data',
+                order: 'score',
+                model_friendly: 'number',
+                modelProps: {
+                    absent: []
+                },
+                where: {}
+            },
+
+            tempUser: {
+                name: null,
+                email: null,
+                password: null
+            }
+        };
+    },
+
+
+    methods: {
+        showInOut: function showInOut() {
+            Bus.$emit('ShowInOutBoard');
+        },
+        toggleChecked: function toggleChecked() {
+            this.show_checked = !this.show_checked;
+
+            Bus.$emit('ShowChecked', this.show_checked);
+        },
+        toggleOpen: function toggleOpen() {
+            this.show_open = !this.show_open;
+
+            this.details.where = this.show_open ? { status: 'Open' } : {};
+        }
+    }
+});
+
+/***/ }),
+/* 387 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(5)(
+  /* script */
+  __webpack_require__(386),
+  /* template */
+  __webpack_require__(388),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "C:\\b\\Code\\standup\\resources\\assets\\js\\components\\MyTickets.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] MyTickets.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-00118052", Component.options)
+  } else {
+    hotAPI.reload("data-v-00118052", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 388 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('page', {
+    attrs: {
+      "params": _vm.details,
+      "toggles": _vm.toggles
+    }
+  }, [_c('template', {
+    slot: "menu"
+  }, [_c('toggle', {
+    attrs: {
+      "active": _vm.show_checked
+    },
+    on: {
+      "clicked": _vm.toggleChecked
+    }
+  }, [_vm._v("Checked")]), _vm._v(" "), _c('toggle', {
+    attrs: {
+      "active": _vm.show_open
+    },
+    on: {
+      "clicked": _vm.toggleOpen
+    }
+  }, [_vm._v("Open Only")])], 1)], 2)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-00118052", module.exports)
   }
 }
 
