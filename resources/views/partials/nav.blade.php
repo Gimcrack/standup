@@ -19,6 +19,7 @@
         <div class="collapse navbar-collapse" id="app-navbar-collapse">
             <!-- Left Side Of Navbar -->
             <ul class="nav navbar-nav">
+                @if( Auth::user() )
                 <li>
                     <p class="navbar-btn">
                         <a @click.prevent="home.showInOut" class="btn btn-success">
@@ -27,6 +28,7 @@
                         </a>
                     </p>
                 </li>
+                @endif
             </ul>
 
             <!-- Right Side Of Navbar -->

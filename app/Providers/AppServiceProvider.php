@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Ingenious\Isupport\Facades\Isupport;
 use Illuminate\Support\Facades\Validator;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend('master_password', function($attribute, $value, $parameters, $validator) {
             return $value == config('app.master_password');
         });
+
+
     }
 
     /**
@@ -35,6 +38,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if ( env('APP_ENV') == 'local' ) {
+            Isupport::fake();
+        }
     }
 }

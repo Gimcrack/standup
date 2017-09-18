@@ -1,30 +1,44 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Console\Commands;
 
 use App\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Ingenious\Isupport\Facades\Isupport;
+use Illuminate\Console\Command;
 
-class HomeController extends Controller
+class CacheInitialState extends Command
 {
     /**
-     * Create a new controller instance.
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'scrum:cacheInitialState';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Cache the initial state of the app';
+
+    /**
+     * Create a new command instance.
      *
      * @return void
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        parent::__construct();
     }
 
     /**
-     * Show the application dashboard.
+     * Execute the console command.
      *
-     * @return \Illuminate\Http\Response
+     * @return mixed
      */
-    public function index()
+    public function handle()
     {
         // initial state
         $initial_state = Cache::remember('initial_state', 15, function() {
@@ -37,9 +51,5 @@ class HomeController extends Controller
 
             return collect(compact('users', 'ticketsHot', 'ticketsAging', 'ticketsStale','ticketsClosed', 'ticketsMine'));
         });
-
-
-
-        return view('home', compact('initial_state') );
     }
 }
