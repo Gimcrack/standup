@@ -42,7 +42,7 @@ class CacheInitialState extends Command
     {
         // initial state
         $initial_state = Cache::remember('initial_state', 15, function() {
-            $users = ( \Auth::user()->isAdmin() ) ? User::all() : [];
+            $users = User::all();
             $ticketsHot = Isupport::hot();
             $ticketsAging = Isupport::aging();
             $ticketsStale = Isupport::stale();
