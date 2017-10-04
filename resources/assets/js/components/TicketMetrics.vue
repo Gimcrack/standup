@@ -3,7 +3,9 @@
         <div class="page-header">
             <h2>OIT Ticket Metrics</h2>
         </div>
-
+        <div class="alert alert-info">
+            This chart shows the trend of the average time to first response of closed tickets assigned to OIT. The blue series (Average TTFR) shows the average of the raw data. The other series attempt to get a more accurate picture by disregarding outliers in the datasets. Outliers are defined as values that fall outside the mean +/- 1, 2, or 3 standard deviations respectively.
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <label>Resolution (Days)</label>

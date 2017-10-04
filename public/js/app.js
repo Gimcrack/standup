@@ -38737,6 +38737,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -68955,6 +68957,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     staticClass: "page ticket-metrics"
   }, [_vm._m(0), _vm._v(" "), _c('div', {
+    staticClass: "alert alert-info"
+  }, [_vm._v("\n        This chart shows the trend of the average time to first response of closed tickets assigned to OIT. The blue series (Average TTFR) shows the average of the raw data. The other series attempt to get a more accurate picture by disregarding outliers in the datasets. Outliers are defined as values that fall outside the mean +/- 1, 2, or 3 standard deviations respectively.\n    ")]), _vm._v(" "), _c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-12"
