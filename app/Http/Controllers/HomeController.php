@@ -27,18 +27,20 @@ class HomeController extends Controller
     public function index()
     {
         // initial state
-        $initial_state = Cache::remember('initial_state', 15, function() {
+        $initial_state = Cache::remember('initial_state_' . \Auth::id(), 15, function() {
             $users = ( \Auth::user()->isAdmin() ) ? User::all() : [];
             $ticketsHot = Isupport::hot();
             $ticketsAging = Isupport::aging();
             $ticketsStale = Isupport::stale();
             $ticketsClosed = Isupport::recentClosed();
             $ticketsMine = Isupport::openTicketsByReps( [ \Auth::user()->name ] );
+            $averageTimeOpen = Isupport::averageTimeOpen($resolution = 10, $groupOrIndividual = "Group", $id = "OIT", $years = 1);
 
-            return collect(compact('users', 'ticketsHot', 'ticketsAging', 'ticketsStale','ticketsClosed', 'ticketsMine'));
+            return collect(
+                compact('users', 'ticketsHot', 'ticketsAging', 'ticketsStale',
+                    'ticketsClosed', 'ticketsMine', 'averageTimeOpen')
+            );
         });
-
-
 
         return view('home', compact('initial_state') );
     }

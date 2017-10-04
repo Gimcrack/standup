@@ -20,6 +20,11 @@
                     </a>
                   </li>
                   <li>
+                    <a id="metrics" @click="nav('metrics',$event)">
+                        <i class="fa fa-fw fa-2x fa-dashboard text-success"></i>
+                    </a>
+                  </li>
+                  <li>
                     <a id="problem" @click="nav('problem',$event)">
                         <i class="fa fa-fw fa-2x fa-exclamation-circle text-danger"></i>
                     </a>
@@ -58,6 +63,11 @@
                     <div class="tab-pane" id="closed">
                         <div>
                             <closed-tickets></closed-tickets>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="metrics">
+                        <div>
+                            <ticket-metrics></ticket-metrics>
                         </div>
                     </div>
                     <div class="tab-pane" id="problem">

@@ -21,6 +21,11 @@ Route::get('ticketsProblem', 'ProblemTicketController@index');
 Route::get('ticketsMine', 'MyTicketController@index');
 Route::get('ticketsClosed', 'ClosedTicketController@index');
 
+Route::get('ticketsAverageTimeOpen', 'TicketMetricsController@averageTimeOpen');
+Route::get('ticketsAverageTimeOpen/{groupOrIndividual}/{id}', 'TicketMetricsController@averageTimeOpen');
+Route::get('ticketsAverageTimeOpen/{groupOrIndividual}/{id}/{resolution}', 'TicketMetricsController@averageTimeOpen');
+Route::get('ticketsAverageTimeOpen/{groupOrIndividual}/{id}/{resolution}/{years}', 'TicketMetricsController@averageTimeOpen');
+
 Route::get('tickets', 'TicketController@index');
 Route::get('tickets/{groupOrIndivual}/{id}', 'TicketController@index');
 
